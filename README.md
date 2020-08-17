@@ -1,7 +1,5 @@
 ![unleaded](https://i.imgur.com/qWb9Yxp.png)
 
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
-
 > The best way to see the current price of gas on Ethereum.
 
 Download the app live [on the App Store](https://itunes.apple.com/us/app/unleaded/id1446763654)!
@@ -32,6 +30,6 @@ Special thanks to [GoodBoyGraphics](https://twitter.com/GoodBoyGraphics) for the
 
 Thanks to [@mikedemarais](https://twitter.com/mikedemarais) for the idea!
 
-Extra special thanks to [Shane :zap: Vitarana](https://twitter.com/shanev) and [@mikedemarais](https://twitter.com/mikedemarais) again for donating to cover the cost of the Apple Developer account. 
+Extra special thanks to [Shane :zap: Vitarana](https://twitter.com/shanev) and [@mikedemarais](https://twitter.com/mikedemarais) again for donating to cover the cost of the Apple Developer account.
 
 Data is pulled from [ethereum-api](https://github.com/pedrouid/ethereum-api), many thanks to [@pedrouid](https://twitter.com/pedrouid)!.
