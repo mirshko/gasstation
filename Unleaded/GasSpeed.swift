@@ -25,7 +25,7 @@ struct GasSpeed: View {
 
 struct GasSpeed_Previews: PreviewProvider {
     static var previews: some View {
-        GasSpeed(speed: "Fast", time: "~30 secs", cost: "$0.93")
+        GasSpeed(speed: "Trader", time: "~30 secs", cost: "$0.93")
             .previewLayout(.sizeThatFits)
     }
 }

@@ -24,15 +24,15 @@ struct ContentView: View {
             }.padding(.vertical, 24)
 
             VStack(alignment: .leading, spacing: 16) {
-                GasSpeed(speed: "Fast", time: "~30 secs", cost: "$0.93")
+                GasSpeed(speed: "Trader", time: "~30 secs", cost: "$0.93")
                 
-                Divider().background(Color.gray)
+                Divider().background(Color(UIColor.separator))
                 
-                GasSpeed(speed: "Average", time: "~42 secs", cost: "$0.86")
+                GasSpeed(speed: "Fast", time: "~42 secs", cost: "$0.86")
                 
-                Divider().background(Color.gray)
+                Divider().background(Color(UIColor.separator))
 
-                GasSpeed(speed: "Slow", time: "~18.8 mins", cost: "$0.83")
+                GasSpeed(speed: "Standard", time: "~18.8 mins", cost: "$0.83")
             }
         }
         .padding(.horizontal, 20)
@@ -66,13 +66,20 @@ struct ContentView: View {
     
     
     var body: some View {
-        ScrollView {
-            gasSpeeds
-            
-            Divider().background(Color.gray)
-
-            gasGuzzlers
+        List {
+            ForEach(0 ..< 10) { item in
+                GasGuzzler(address: "0x1234...5678", percent: "24.23%")
+            }
         }
+            .listStyle(InsetGroupedListStyle())
+        
+//        ScrollView {
+//            gasSpeeds
+//
+//            Divider().background(Color.gray)
+//
+//            gasGuzzlers
+//        }
     }
 }
 

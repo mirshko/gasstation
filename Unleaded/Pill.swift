@@ -17,7 +17,7 @@ struct Pill: View {
             .fontWeight(isSmall ? .medium : .semibold)
             .padding(.horizontal, isSmall ? 8.0 : 10.0)
             .padding(.vertical, isSmall ? 4.0 : 6.0)
-            .background(Color.gray.opacity(0.2))
+            .background(Color(UIColor.systemGray6))
             .foregroundColor(.primary)
             .cornerRadius(9999)
     }
@@ -28,7 +28,15 @@ struct Pill_Previews: PreviewProvider {
         Pill(text: "Value")
             .previewLayout(.sizeThatFits)
         
+        Pill(text: "Value Dark")
+            .previewLayout(.sizeThatFits)
+            .colorScheme(.dark)
+        
         Pill(text: "Small Value", isSmall: true)
             .previewLayout(.sizeThatFits)
+        
+        Pill(text: "Small Value Dark", isSmall: true)
+            .previewLayout(.sizeThatFits)
+            .colorScheme(.dark)
     }
 }
