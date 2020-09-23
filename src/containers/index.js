@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { ActionSheetIOS, Alert } from "react-native";
-import store from "react-native-simple-store";
 import { createContainer } from "unstated-next";
-import { loadConfig } from "../helpers";
-
-const gasEndpoint = `https://unleaded-api.vercel.app/api/gas-prices`;
-const ethEndpoint = `https://unleaded-api.vercel.app/api/eth-prices`;
-const guzzlersEndpoint = `https://unleaded-api.vercel.app/api/gas-guzzlers`;
+import useEthPrices from "../hooks/useEthPrices";
+import useGasPrices from "../hooks/useGasPrices";
+import useGasGuzzlers from "../hooks/useGasGuzzlers";
+import useConfig from "../hooks/useConfig";
 
 const currencyOptionArray = ["USD", "GBP", "EUR", "CAD", "CNY", "RON", "JPY"];
 
@@ -15,16 +13,32 @@ const useApp = () => {
   const [hasErrored, setHasErrored] = useState(false);
   const [refreshing, setIsRefreshing] = useState(false);
 
-  const [gasData, setGasData] = useState({});
-  const [ethData, setEthData] = useState({});
-  const [guzzlerData, setGuzzlerData] = useState({});
+  const {
+    data: gasData,
+    revalidate: gasDataRevalidate,
+    error: gasDataError,
+  } = useGasPrices();
+
+  const {
+    data: ethData,
+    revalidate: ethDataRevalidate,
+    error: ethDataError,
+  } = useEthPrices();
+
+  const {
+    data: guzzlerData,
+    revalidate: guzzlerDataRevalidate,
+    error: guzzlerDataError,
+  } = useGasGuzzlers();
+
+  const { config, updateConfig } = useConfig();
 
   const [showGasInCurrency, toggleShowGasInCurrency] = useState(false);
   const [nativeCurrency, setNativeCurrency] = useState("USD");
 
   useEffect(() => {
     const bootApp = async () => {
-      await restoreUserConfig();
+      await loadUserConfig();
 
       await fetchData();
 
@@ -37,18 +51,15 @@ const useApp = () => {
   const handleShowGasInCurrency = async () => {
     toggleShowGasInCurrency(!showGasInCurrency);
 
-    await store.update("config", {
+    await updateConfig({
       showGasInCurrency: !showGasInCurrency,
     });
   };
 
-  const restoreUserConfig = async () => {
+  const loadUserConfig = async () => {
     try {
-      const config = await store.get("config");
-
-      if (loadConfig(config)) {
+      if (config) {
         toggleShowGasInCurrency(config.showGasInCurrency || showGasInCurrency);
-
         setNativeCurrency(config.nativeCurrency || nativeCurrency);
       }
     } catch (err) {
@@ -78,7 +89,7 @@ const useApp = () => {
 
           setNativeCurrency(selectedCurrency);
 
-          await store.update("config", {
+          await updateConfig({
             nativeCurrency: selectedCurrency,
           });
 
@@ -110,37 +121,17 @@ const useApp = () => {
     );
 
   const fetchData = async () => {
-    let fiat;
-
-    const config = await store.get("config");
-
-    loadConfig(await config)
-      ? (fiat = await config.nativeCurrency)
-      : (fiat = nativeCurrency);
-
     try {
-      const gasResponse = await fetch(gasEndpoint);
-      const gasResponseJson = await gasResponse.json();
-
-      setGasData(await gasResponseJson);
-
-      const ethPriceResponse = await fetch(`${ethEndpoint}?fiat=${fiat}`);
-      const ethPriceResponseJson = await ethPriceResponse.json();
-
-      setEthData(await ethPriceResponseJson);
-
-      const guzzlerResponse = await fetch(guzzlersEndpoint);
-      const guzzlerResponseJson = await guzzlerResponse.json();
-
-      setGuzzlerData(await guzzlerResponseJson);
+      await gasDataRevalidate();
+      await guzzlerDataRevalidate();
+      await ethDataRevalidate();
     } catch (error) {
       console.error(error);
 
       setHasErrored(true);
+
       handleError();
     }
-
-    return Promise.resolve();
   };
 
   return {
@@ -161,6 +152,4 @@ const useApp = () => {
   };
 };
 
-let AppContainer = createContainer(useApp);
-
-export { AppContainer };
+export let AppContainer = createContainer(useApp);

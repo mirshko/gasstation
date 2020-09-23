@@ -28,6 +28,7 @@ const App = () => {
     );
 
   const { fastest, fast, average } = data.gasData;
+
   const gasSpeeds = [
     {
       key: "fastest",
